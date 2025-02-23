@@ -4,7 +4,7 @@ from datetime import datetime
 import httpx
 
 from formatters.dict_keys_to_snake_case import dict_keys_to_snake_case
-from models.comment import YoutubeComment
+from models.youtube_comment import YoutubeComment
 from models.youtube_comments_response import YoutubeCommentsResponse
 from models.youtube_video import YoutubeVideo
 from models.youtube_video_response import YoutubeVideoResponse
@@ -81,6 +81,16 @@ class YoutubeRepository:
         id: str,
         part: str = "snippet, statistics",
     ) -> YoutubeVideo:
+        """
+        Retrieves information about a specific YouTube video.
+
+        Args:
+            id (str): The ID of the YouTube video to retrieve.
+            part (str, optional): The parts of the video information to retrieve. Defaults to "snippet, statistics".
+
+        Returns:
+            YoutubeVideo: A YoutubeVideo object containing the video information.
+        """
         params = {"part": part, "id": id}
 
         response = await self.__client.get("/videos", params=params)
