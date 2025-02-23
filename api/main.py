@@ -1,8 +1,9 @@
 from dotenv import load_dotenv
 from injector import Injector
 
+from models.comment import Comment
+from models.youtube_video import YoutubeVideo
 from repositories.youtube_repository import YoutubeRepository
-from services.youtube_service import YoutubeService
 
 load_dotenv()
 
@@ -14,7 +15,7 @@ injector = Injector()
 
 @app.get("/analyze/{video_id}")
 async def root(video_id: str):
-    yt = injector.get(YoutubeService)
+    yt = injector.get(YoutubeRepository)
 
     # TODO: check if data in DB
 
@@ -23,13 +24,22 @@ async def root(video_id: str):
     # TODO: Save video & comments data in DB
     # TODO: Analyze sentiments
 
-    return comments
+    return {"message": "Done !"}
 
 
 @app.get("/videos/{id}")
-async def video_by_id(id: str):
+async def get_video_by_id(id: str) -> YoutubeVideo:
     yt = injector.get(YoutubeRepository)
 
     video = await yt.get_video_by_id(id)
 
     return video
+
+
+@app.get("/videos/{id}/comments")
+async def get_comments_by_video_id(id: str) -> list[Comment]:
+    yt = injector.get(YoutubeRepository)
+
+    comments = await yt.get_comments_by_video_id(id, 100)
+
+    return comments
