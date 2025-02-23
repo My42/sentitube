@@ -19,9 +19,8 @@ async def analyze_sentiments_of_video(video_id: str):
 
     # TODO: check if data in DB
 
-    # TODO: Get video's data
-    video = await yt.get_video_by_id(video_id)
-    comments = await yt.get_comments_by_video_id(video_id, count=10)
+    yt_video = await yt.get_video_by_id(video_id)
+    yt_comments = await yt.get_comments_by_video_id(video_id, count=10)
     # TODO: Save video & comments data in DB
     # TODO: Analyze sentiments
 
@@ -32,15 +31,15 @@ async def analyze_sentiments_of_video(video_id: str):
 async def get_video_by_id(id: str) -> YoutubeVideo:
     yt = injector.get(YoutubeRepository)
 
-    video = await yt.get_video_by_id(id)
+    yt_video = await yt.get_video_by_id(id)
 
-    return video
+    return yt_video
 
 
 @app.get("/videos/{id}/comments")
 async def get_comments_by_video_id(id: str) -> list[YoutubeComment]:
     yt = injector.get(YoutubeRepository)
 
-    comments = await yt.get_comments_by_video_id(id, 100)
+    yt_comments = await yt.get_comments_by_video_id(id, 100)
 
-    return comments
+    return yt_comments
