@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from injector import Injector
 
+from repositories.youtube_repository import YoutubeRepository
 from services.youtube_service import YoutubeService
 
 load_dotenv()
@@ -23,3 +24,12 @@ async def root(video_id: str):
     # TODO: Analyze sentiments
 
     return comments
+
+
+@app.get("/videos/{id}")
+async def video_by_id(id: str):
+    yt = injector.get(YoutubeRepository)
+
+    video = await yt.get_video_by_id(id)
+
+    return video
