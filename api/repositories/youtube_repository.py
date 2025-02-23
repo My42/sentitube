@@ -4,7 +4,7 @@ from datetime import datetime
 import httpx
 
 from formatters.dict_keys_to_snake_case import dict_keys_to_snake_case
-from models.comment import Comment
+from models.comment import YoutubeComment
 from models.youtube_comments_response import YoutubeCommentsResponse
 from models.youtube_video import YoutubeVideo
 from models.youtube_video_response import YoutubeVideoResponse
@@ -23,7 +23,7 @@ class YoutubeRepository:
         count: int,
         part: str = "id,snippet",
         text_format: str = "plainText",
-    ) -> list[Comment]:
+    ) -> list[YoutubeComment]:
         """
         Retrieves comments for a specific YouTube video.
         Args:
@@ -53,7 +53,7 @@ class YoutubeRepository:
 
             comments.extend(
                 [
-                    Comment(
+                    YoutubeComment(
                         id=item.id,
                         video_id=item.snippet.video_id,
                         like_count=item.snippet.top_level_comment.snippet.like_count,

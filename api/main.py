@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from injector import Injector
 
-from models.comment import Comment
+from models.youtube_comment import YoutubeComment
 from models.youtube_video import YoutubeVideo
 from repositories.youtube_repository import YoutubeRepository
 
@@ -37,7 +37,7 @@ async def get_video_by_id(id: str) -> YoutubeVideo:
 
 
 @app.get("/videos/{id}/comments")
-async def get_comments_by_video_id(id: str) -> list[Comment]:
+async def get_comments_by_video_id(id: str) -> list[YoutubeComment]:
     yt = injector.get(YoutubeRepository)
 
     comments = await yt.get_comments_by_video_id(id, 100)

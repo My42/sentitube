@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class Comment(BaseModel):
+class YoutubeComment(BaseModel):
     id: str
     video_id: str
     like_count: int
