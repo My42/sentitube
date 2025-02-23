@@ -19,6 +19,7 @@ class YoutubeRepository:
         max_results: int = 100,
         part: str = "id,snippet",
         text_format: str = "plainText",
+        next_page_token: str | None = None,
     ) -> YoutubeCommentsResponse:
         params = {
             "maxResults": max_results,
@@ -26,6 +27,9 @@ class YoutubeRepository:
             "textFormat": text_format,
             "videoId": video_id,
         }
+
+        if next_page_token is not None:
+            params["pageToken"] = next_page_token
 
         response = await self.__client.get("/commentThreads", params=params)
         json = dict_keys_to_snake_case(response.json())
