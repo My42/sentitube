@@ -4,15 +4,15 @@ load_dotenv()
 
 from fastapi import FastAPI
 
-from services.youtube_service import YoutubeService
+from repositories.youtube_repository import YoutubeRepository
 
 app = FastAPI()
 
 
 @app.get("/analyze/{video_id}")
 async def root(video_id: str):
-    yt = YoutubeService()
+    yt = YoutubeRepository()
 
     comments = await yt.get_comments_by_video_id(video_id)
 
-    return {"comments": comments}
+    return comments

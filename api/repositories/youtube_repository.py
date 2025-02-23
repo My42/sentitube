@@ -3,12 +3,10 @@ import os
 import httpx
 
 from formatters.dict_keys_to_snake_case import dict_keys_to_snake_case
-from models.youtube_comments_response import (CommentThread,
-                                              YoutubeCommentsResponse)
+from models.youtube_comments_response import YoutubeCommentsResponse
 
 
-# TODO: REPO ?
-class YoutubeService:
+class YoutubeRepository:
     def __init__(self):
         self.__client = httpx.AsyncClient(
             base_url="https://www.googleapis.com/youtube/v3",
