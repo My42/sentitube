@@ -17,6 +17,7 @@ pytest = "^8.3.4"
 black = "^25.1.0"
 isort = "^6.0.0"
 injector = "^0.22.0"
+langchain = {extras = ["openai"], version = "^0.3.19"}
 
 
 [build-system]
