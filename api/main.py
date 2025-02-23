@@ -14,12 +14,13 @@ injector = Injector()
 
 
 @app.get("/analyze/{video_id}")
-async def root(video_id: str):
+async def analyze_sentiments_of_video(video_id: str):
     yt = injector.get(YoutubeRepository)
 
     # TODO: check if data in DB
 
     # TODO: Get video's data
+    video = await yt.get_video_by_id(video_id)
     comments = await yt.get_comments_by_video_id(video_id, count=10)
     # TODO: Save video & comments data in DB
     # TODO: Analyze sentiments
