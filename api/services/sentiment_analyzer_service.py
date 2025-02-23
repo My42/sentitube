@@ -10,7 +10,7 @@ class SentimentAnalyserService:
     def __init__(self):
         self.__llm = ChatOpenAI(model="gpt-4o")
 
-    def analyze_comments(
+    async def analyze_comments(
         self, yt_video: YoutubeVideo, yt_comments: list[YoutubeComment]
     ):
         prompt = """
@@ -41,7 +41,7 @@ class SentimentAnalyserService:
         )
 
         chain = prompt_template | self.__llm
-        response = chain.invoke(
+        response = await chain.ainvoke(
             {
                 "video_title": yt_video.title,
                 "comments": [

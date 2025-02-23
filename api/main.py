@@ -23,7 +23,7 @@ async def analyze_sentiments_of_video(video_id: str):
 
     yt_video = await yt.get_video_by_id(video_id)
     yt_comments = await yt.get_comments_by_video_id(video_id, count=10)
-    comments = sentiment_analyzer.analyze_comments(yt_video, yt_comments)
+    comments = await sentiment_analyzer.analyze_comments(yt_video, yt_comments)
     # TODO: Save video & comments data in DB
 
     return comments
