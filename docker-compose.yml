@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:17
+    container_name: db
+    environment:
+      POSTGRES_USER: my_user
+      POSTGRES_PASSWORD: my_password
+      POSTGRES_DB: sentitube
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: ./api
+    container_name: api
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://my_user:my_password@db:5432/sentitube
+    ports:
+      - 8080:8080
+
+volumes:
+  pgdata:
