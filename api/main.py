@@ -45,3 +45,21 @@ async def get_comments_by_video_id(id: str) -> list[YoutubeComment]:
     yt_comments = await yt.get_comments_by_video_id(id, 100)
 
     return yt_comments
+
+
+@app.post("/add/{x}/{y}")
+def run_task(x: int, y: int):
+    """Trigger a Celery task."""
+    task = add.delay(x, y)
+    return {"task_id": task.id}
+
+
+@app.get("/task/{task_id}")
+def get_task_status(task_id: str):
+    """Check the status of a Celery task."""
+    task_result = AsyncResult(task_id, app=celery)
+    return {
+        "task_id": task_id,
+        "status": task_result.status,
+        "result": task_result.result,
+    }
