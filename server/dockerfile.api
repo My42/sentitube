@@ -1,4 +1,4 @@
-FROM python:3.13.3-alpine
+FROM python:3.13.3-alpine AS base
 
 WORKDIR /app
 
@@ -7,9 +7,20 @@ COPY poetry.toml .
 COPY pyproject.toml .
 
 RUN pip install poetry
+
+RUN poetry install
+
 RUN poetry install
 
 COPY ./src ./src
 
+# === Dev stage ===
+FROM base AS dev
+
 CMD ["poetry", "run", "fastapi", "dev", "src/api.py", "--", "--proxy-headers", "--port", "8080", "--host", "0.0.0.0"]
 
+# === Prod stage ===
+FROM base AS prod
+
+# TODO: fix this command line
+CMD ["poetry", "run", "uvicorn", "src/api.py", "--host", "0.0.0.0", "--port", "80"]
