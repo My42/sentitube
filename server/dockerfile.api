@@ -7,9 +7,7 @@ COPY poetry.toml .
 COPY pyproject.toml .
 
 RUN pip install poetry
-
 RUN poetry install
-
 RUN poetry install
 
 COPY ./src ./src
