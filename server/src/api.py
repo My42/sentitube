@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 from injector import Injector
-
 from models.youtube_comment import YoutubeComment
 from models.youtube_video import YoutubeVideo
 from repositories.youtube_repository import YoutubeRepository

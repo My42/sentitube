@@ -1,0 +1,15 @@
+FROM python:3.13.3-alpine
+
+WORKDIR /app
+
+COPY poetry.lock .
+COPY poetry.toml .
+COPY pyproject.toml .
+
+RUN pip install poetry
+RUN poetry install
+
+COPY ./src ./src
+
+CMD ["poetry", "run", "fastapi", "dev", "src/api.py", "--", "--proxy-headers", "--port", "8080", "--host", "0.0.0.0"]
+
