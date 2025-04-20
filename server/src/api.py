@@ -1,9 +1,11 @@
 from dotenv import load_dotenv
 from injector import Injector
-from models.youtube_comment import YoutubeComment
-from models.youtube_video import YoutubeVideo
-from repositories.youtube_repository import YoutubeRepository
-from services.sentiment_analyzer_service import SentimentAnalyserService
+from openai import BaseModel
+from src.models.youtube_comment import YoutubeComment
+from src.models.youtube_video import YoutubeVideo
+from src.repositories.youtube_repository import YoutubeRepository
+from src.services.sentiment_analyzer_service import SentimentAnalyserService
+from src.tasks.add import add_task
 
 load_dotenv()
 
@@ -44,3 +46,15 @@ async def get_comments_by_video_id(id: str) -> list[YoutubeComment]:
     yt_comments = await yt.get_comments_by_video_id(id, 100)
 
     return yt_comments
+
+
+class AddBody(BaseModel):
+    a: int
+    b: int
+
+
+@app.post("/add")
+def call_add(body: AddBody) -> dict:
+    """Trigger 'add' Celery task"""
+    task = add_task.delay(body.a, body.b)
+    return {"task_id": str(task)}

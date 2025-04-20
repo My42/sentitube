@@ -2,12 +2,11 @@ import os
 from datetime import datetime
 
 import httpx
-
-from formatters.dict_keys_to_snake_case import dict_keys_to_snake_case
-from models.youtube_comment import YoutubeComment
-from models.youtube_comments_response import YoutubeCommentsResponse
-from models.youtube_video import YoutubeVideo
-from models.youtube_video_response import YoutubeVideoResponse
+from src.formatters.dict_keys_to_snake_case import dict_keys_to_snake_case
+from src.models.youtube_comment import YoutubeComment
+from src.models.youtube_comments_response import YoutubeCommentsResponse
+from src.models.youtube_video import YoutubeVideo
+from src.models.youtube_video_response import YoutubeVideoResponse
 
 
 class YoutubeRepository:

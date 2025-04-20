@@ -1,6 +1,6 @@
 import unittest
 
-from formatters.dict_keys_to_snake_case import dict_keys_to_snake_case
+from src.formatters.dict_keys_to_snake_case import dict_keys_to_snake_case
 
 
 class TestDictKeysToSnakeCase(unittest.TestCase):

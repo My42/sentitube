@@ -14,10 +14,9 @@ COPY ./src ./src
 # === Dev stage ===
 FROM base AS dev
 
-CMD ["poetry", "run", "fastapi", "dev", "src/api.py", "--", "--proxy-headers", "--port", "8080", "--host", "0.0.0.0"]
+CMD ["poetry", "run", "celery", "-A", "src.worker", "worker", "-l", "DEBUG"]
 
 # === Prod stage ===
 FROM base AS prod
 
-# TODO: fix this command line
-CMD ["poetry", "run", "uvicorn", "src/api.py", "--host", "0.0.0.0", "--port", "80"]
+CMD ["poetry", "run", "celery", "-A", "src.worker", "worker", "-l", "INFO"]

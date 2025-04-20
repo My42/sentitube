@@ -1,9 +1,8 @@
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-
-from models.youtube_comment import YoutubeComment
-from models.youtube_video import YoutubeVideo
+from src.models.youtube_comment import YoutubeComment
+from src.models.youtube_video import YoutubeVideo
 
 
 class SentimentAnalyserService:
