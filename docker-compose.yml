@@ -25,6 +25,8 @@ services:
       dockerfile: dockerfile.worker
       target: dev
     container_name: worker
+    volumes:
+      - ./server/src:/app/src
     depends_on:
       - redis
       - db

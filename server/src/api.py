@@ -6,6 +6,7 @@ from src.models.youtube_video import YoutubeVideo
 from src.repositories.youtube_repository import YoutubeRepository
 from src.services.sentiment_analyzer_service import SentimentAnalyserService
 from src.tasks.add import add_task
+from src.tasks.analyze_comments import analyze_comments
 
 load_dotenv()
 
@@ -15,19 +16,19 @@ app = FastAPI()
 injector = Injector()
 
 
-@app.get("/analyze/{video_id}")
-async def analyze_sentiments_of_video(video_id: str):
-    yt = injector.get(YoutubeRepository)
-    sentiment_analyzer = injector.get(SentimentAnalyserService)
+# @app.get("/analyze/{video_id}")
+# async def analyze_sentiments_of_video(video_id: str):
+#     yt = injector.get(YoutubeRepository)
+#     sentiment_analyzer = injector.get(SentimentAnalyserService)
 
-    # TODO: check if data in DB
+#     # TODO: check if data in DB
 
-    yt_video = await yt.get_video_by_id(video_id)
-    yt_comments = await yt.get_comments_by_video_id(video_id, count=10)
-    comments = await sentiment_analyzer.analyze_comments(yt_video, yt_comments)
-    # TODO: Save video & comments data in DB
+#     yt_video = await yt.get_video_by_id(video_id)
+#     yt_comments = await yt.get_comments_by_video_id(video_id, count=10)
+#     comments = await sentiment_analyzer.analyze_comments(yt_video, yt_comments)
+#     # TODO: Save video & comments data in DB
 
-    return comments
+#     return comments
 
 
 @app.get("/videos/{id}")
@@ -57,4 +58,10 @@ class AddBody(BaseModel):
 def call_add(body: AddBody) -> dict:
     """Trigger 'add' Celery task"""
     task = add_task.delay(body.a, body.b)
-    return {"task_id": str(task)}
+    return {"task_id": task.id}
+
+
+@app.get("/analyze/{video_id}")
+async def analyze_sentiments_of_video(video_id: str) -> dict:
+    task = analyze_comments.delay(video_id)
+    return {"task_id": task.id}

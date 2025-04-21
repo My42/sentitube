@@ -1,4 +1,3 @@
-from celery import shared_task
 from celery.app.task import Task
 from src.worker import celery_app
 
