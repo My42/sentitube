@@ -1,3 +1,4 @@
+from celery.result import AsyncResult
 from dotenv import load_dotenv
 from injector import Injector
 from openai import BaseModel
@@ -59,6 +60,16 @@ def call_add(body: AddBody) -> dict:
     """Trigger 'add' Celery task"""
     task = add_task.delay(body.a, body.b)
     return {"task_id": task.id}
+
+
+@app.get("/tasks/{task_id}")
+async def get_task(task_id: str) -> dict:
+    result = AsyncResult(task_id)
+
+    return {
+        "status": result.state,
+        "result": result.result,
+    }
 
 
 @app.get("/analyze/{video_id}")

@@ -8,7 +8,7 @@ from src.worker import celery_app
 
 @celery_app.task
 def analyze_comments(video_id: str) -> list[dict]:
-    async def inner_fn(video_id: str) -> dict:
+    async def inner_fn(video_id: str) -> list[dict]:
         yt = YoutubeRepository()
         sentiment_analyzer = SentimentAnalyserService()
 

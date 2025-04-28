@@ -7,7 +7,7 @@ from src.models.youtube_video import YoutubeVideo
 
 class SentimentAnalyserService:
     def __init__(self):
-        self.__llm = ChatOpenAI(model="gpt-4o")
+        self.__llm = ChatOpenAI(model="gpt-4o", temperature=0)
 
     async def analyze_comments(
         self, yt_video: YoutubeVideo, yt_comments: list[YoutubeComment]

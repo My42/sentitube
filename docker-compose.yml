@@ -24,15 +24,22 @@ services:
       context: ./server
       dockerfile: dockerfile.worker
       target: dev
+    environment:
+      DATABASE_URL: postgres://my_user:my_password@db:5432/sentitube
+      REDIS_URL: redis:6379
+      YOUTUBE_ACCESS_TOKEN: ${YOUTUBE_ACCESS_TOKEN}
+      LANGSMITH_TRACING: ${LANGSMITH_TRACING}
+      LANGSMITH_ENDPOINT: ${LANGSMITH_ENDPOINT}
+      LANGSMITH_API_KEY: ${LANGSMITH_API_KEY}
+      LANGSMITH_PROJECT: ${LANGSMITH_PROJECT}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
     container_name: worker
     volumes:
       - ./server/src:/app/src
     depends_on:
       - redis
       - db
-    environment:
-      DATABASE_URL: postgres://my_user:my_password@db:5432/sentitube
-      REDIS_URL: redis:6379
 
   api:
     build:
