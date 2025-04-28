@@ -1,23 +1,23 @@
 import asyncio
 
 from celery.app.task import Task
-from src.repositories.youtube_repository import YoutubeRepository
+from injector import Injector
 from src.services.sentiment_analyzer_service import SentimentAnalyserService
 from src.worker import celery_app
 
+injector = Injector()
+
 
 @celery_app.task
-def analyze_comments(video_id: str) -> list[dict]:
-    async def inner_fn(video_id: str) -> list[dict]:
-        yt = YoutubeRepository()
-        sentiment_analyzer = SentimentAnalyserService()
+def analyze_comments(yt_video_id: str) -> list[dict]:
+    async def inner_fn(yt_video_id: str) -> list[dict]:
+        sentiment_analyzer = injector.get(SentimentAnalyserService)
 
-        yt_video = await yt.get_video_by_id(video_id)
-        yt_comments = await yt.get_comments_by_video_id(video_id, count=10)
-        comments = await sentiment_analyzer.analyze_comments(yt_video, yt_comments)
+        comments = await sentiment_analyzer.analyze_comments(yt_video_id)
+
         return comments
 
-    return asyncio.run(inner_fn(video_id))
+    return asyncio.run(inner_fn(yt_video_id))
 
 
 analyze_comments: Task = analyze_comments

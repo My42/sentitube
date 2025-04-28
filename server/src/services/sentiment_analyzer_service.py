@@ -1,17 +1,17 @@
+from injector import inject
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from src.models.youtube_comment import YoutubeComment
-from src.models.youtube_video import YoutubeVideo
+from src.repositories.youtube_repository import YoutubeRepository
 
 
 class SentimentAnalyserService:
-    def __init__(self):
+    @inject
+    def __init__(self, youtube_repository: YoutubeRepository):
         self.__llm = ChatOpenAI(model="gpt-4o", temperature=0)
+        self.__youtube_repository = youtube_repository
 
-    async def analyze_comments(
-        self, yt_video: YoutubeVideo, yt_comments: list[YoutubeComment]
-    ):
+    async def analyze_comments(self, yt_video_id: str):
         prompt = """
         You are an AI specialized in sentiment analysis of YouTube comments. Your goal is to analyze the sentiment of each comment in the context of the video's title. The sentiment score must be a float between -1 and 1, where:
 
@@ -33,6 +33,12 @@ class SentimentAnalyserService:
 
         Return a JSON object for each comment too prevent error when displaying it. beetween each "json" block add "--"
         """
+
+        yt_video = await self.__youtube_repository.get_video_by_id(yt_video_id)
+        yt_comments = await self.__youtube_repository.get_comments_by_video_id(
+            yt_video_id,
+            count=10,
+        )
 
         parser = JsonOutputParser()
         prompt_template = PromptTemplate.from_template(

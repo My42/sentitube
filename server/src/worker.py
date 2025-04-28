@@ -9,7 +9,7 @@ celery_app = Celery(
     "sentiment-analyzer",
     broker=f"redis://{os.environ["REDIS_URL"]}",
     backend=f"redis://{os.environ["REDIS_URL"]}",
-    include=["src.tasks.add", "src.tasks.analyze_comments"],
+    include=["src.tasks.analyze_comments"],
 )
 
 if __name__ == "__main__":
