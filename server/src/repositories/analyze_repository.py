@@ -1,33 +1,32 @@
-import os
-
-import psycopg2
+from injector import inject
 
 from server.src.models.analyze import Analyze
+from server.src.services.database_service import DatabaseService
 
 
 class AnalyzeRepository:
-    def save(self, analyzes: list[Analyze]) -> None:
-        conn = self.__get_conn()
-        cur = conn.cursor()
-        query = """
+    @inject
+    def __init__(self, database_service: DatabaseService) -> None:
+        self.__database_service = database_service
+
+    async def save(self, analyzes: list[Analyze]) -> list[str]:
+        """
+        Saves a list of Analyze objects to the database.
+
+        Args:
+            analyzes (list[Analyze]): A list of Analyze objects to be saved.
+
+        Returns:
+            list[str]: The list of YouTube comment IDs that have been saved.
+        """
+        query = f"""
         INSERT INTO analyzes (justification, sentiment_score, yt_comment_id, yt_comment_text)
-        VALUES (%s, %s, %s, %s)
+        VALUES (%(justification)s, %(sentiment_score)s, %(yt_comment_id)s, %(yt_comment_text)s)
         """
 
-        try:
-            cur.executemany(query, [analyze.model_dump() for analyze in analyzes])
-            conn.commit()
-        except Exception as e:
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
-
-    def __get_conn(self):
-        return psycopg2.connect(
-            dbname=os.environ["POSTGRES_DB"],
-            user=os.environ["POSTGRES_USER"],
-            password=os.environ["POSTGRES_PASSWORD"],
-            host="postgres",
-            port="5432",
+        await self.__database_service.query(
+            query,
+            [analyze.model_dump() for analyze in analyzes],
         )
+
+        return [analyze.yt_comment_id for analyze in analyzes]

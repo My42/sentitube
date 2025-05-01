@@ -20,6 +20,7 @@ injector = "^0.22.0"
 langchain = {extras = ["openai"], version = "^0.3.19"}
 celery = "^5.5.1"
 redis = "^5.2.1"
+psycopg = {extras = ["binary"], version = "^3.2.7"}
 
 
 [build-system]
