@@ -33,8 +33,8 @@ class DatabaseService:
             dbname=os.environ["POSTGRES_DB"],
             user=os.environ["POSTGRES_USER"],
             password=os.environ["POSTGRES_PASSWORD"],
-            host="postgres",  # TODO: must be env var
-            port="5432",  # TODO: must be env var
+            host=os.environ["POSTGRES_HOST"],
+            port=os.environ["POSTGRES_PORT"],
         )
 
         return self.__con

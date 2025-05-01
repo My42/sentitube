@@ -72,14 +72,12 @@ class SentimentAnalyserService:
                 sentiment_score=analyze["sentiment_score"],
                 yt_comment_id=analyze["id"],
                 yt_comment_text=comment_group_by_id[analyze["id"]],
+                yt_video_id=yt_video_id,
             )
             for json in response.content.split("--")
             if (analyze := parser.parse(json))
         ]
 
-        await self.save_analyzes(analyzes)
+        await self.__analyze_repository.save(analyzes)
 
         return analyzes
-
-    async def save_analyzes(self, analyses: list[Analyze]) -> None:
-        self.__analyze_repository.save(analyses)
