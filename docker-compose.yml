@@ -22,12 +22,17 @@ services:
       - redisdata:/data
 
   worker:
+    container_name: worker
     build:
       context: ./server
       dockerfile: dockerfile.worker
       target: dev
     environment:
-      POSTGRES_URL: ${POSTGRES_URL}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
       REDIS_URL: ${REDIS_URL_WORKER}
       YOUTUBE_ACCESS_TOKEN: ${YOUTUBE_ACCESS_TOKEN}
       LANGSMITH_TRACING: ${LANGSMITH_TRACING}
@@ -35,8 +40,8 @@ services:
       LANGSMITH_API_KEY: ${LANGSMITH_API_KEY}
       LANGSMITH_PROJECT: ${LANGSMITH_PROJECT}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
-
-    container_name: worker
+    ports:
+      - 6900:6900
     volumes:
       - ./server/src:/app/src
     depends_on:

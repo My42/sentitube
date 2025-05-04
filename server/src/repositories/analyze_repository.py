@@ -1,7 +1,6 @@
 from injector import inject
-
-from server.src.models.analyze import Analyze
-from server.src.services.database_service import DatabaseService
+from src.models.analyze import Analyze
+from src.services.database_service import DatabaseService
 
 
 class AnalyzeRepository:
@@ -20,8 +19,8 @@ class AnalyzeRepository:
             list[str]: The list of YouTube comment IDs that have been saved.
         """
         query = f"""
-        INSERT INTO analyzes (justification, sentiment_score, yt_comment_id, yt_comment_text)
-        VALUES (%(justification)s, %(sentiment_score)s, %(yt_comment_id)s, %(yt_comment_text)s)
+        INSERT INTO analyzes (justification, sentiment_score, yt_comment_id, yt_comment_text, yt_video_id)
+        VALUES (%(justification)s, %(sentiment_score)s, %(yt_comment_id)s, %(yt_comment_text)s, %(yt_video_id)s)
         """
 
         await self.__database_service.query(

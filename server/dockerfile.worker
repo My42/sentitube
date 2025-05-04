@@ -14,7 +14,9 @@ COPY ./src ./src
 # === Dev stage ===
 FROM base AS dev
 
-CMD ["poetry", "run", "celery", "-A", "src.worker", "worker", "-l", "DEBUG"]
+RUN pip install debugpy -t /tmp
+
+CMD ["poetry", "run", "python", "/tmp/debugpy", "--listen", "0.0.0.0:6900", "-m", "celery", "-A", "src.worker", "worker", "-l", "DEBUG"]
 
 # === Prod stage ===
 FROM base AS prod

@@ -42,8 +42,13 @@ async def get_task(task_id: str) -> dict:
     }
 
 
-@app.get("/analyze/{video_id}")
+@app.post("yt-video/analyze/{yt_video_id}")
 async def analyze_sentiments_of_video(video_id: str) -> dict:
     task = analyze_comments.delay(video_id)
 
     return {"task_id": task.id}
+
+
+@app.get("yt-video/analyze/{yt_video_id}")
+async def get_video_analyze(video_id: str) -> dict:
+    return {}

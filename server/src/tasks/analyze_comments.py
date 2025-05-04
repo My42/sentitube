@@ -10,13 +10,13 @@ injector = Injector()
 
 
 @celery_app.task
-def analyze_comments(yt_video_id: str) -> list[Analyze]:
-    async def inner_fn(yt_video_id: str) -> list[Analyze]:
+def analyze_comments(yt_video_id: str) -> list[dict]:
+    async def inner_fn(yt_video_id: str) -> list[dict]:
         sentiment_analyzer = injector.get(SentimentAnalyserService)
 
         comments = await sentiment_analyzer.analyze_comments(yt_video_id)
 
-        return comments
+        return [comment.model_dump() for comment in comments]
 
     return asyncio.run(inner_fn(yt_video_id))
 

@@ -3,9 +3,8 @@ from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from src.models.analyze import Analyze
+from src.repositories.analyze_repository import AnalyzeRepository
 from src.repositories.youtube_repository import YoutubeRepository
-
-from server.src.repositories.analyze_repository import AnalyzeRepository
 
 
 class SentimentAnalyserService:
