@@ -1,27 +1,36 @@
 import os
-from typing import Iterable, LiteralString
+from typing import Iterable, Literal, LiteralString
 
-from psycopg import AsyncConnection
+from psycopg import AsyncConnection, rows
 
 
 class DatabaseService:
     __conn: AsyncConnection
 
-    async def query(self, q: LiteralString, params_seq: Iterable | None = None):
+    async def query(
+        self,
+        q: LiteralString,
+        params: Iterable | None = None,
+        execute_mode: Literal["many", "single"] = "single",
+    ):
         conn = await self.__get_conn()
 
-        async with conn.cursor() as cur:
+        async with conn.cursor(row_factory=rows.dict_row) as cur:
             async with conn.transaction():
-                if params_seq:
-                    await cur.executemany(q, params_seq, returning=True)
+                if execute_mode == "many":
+                    if params is None:
+                        raise ValueError(
+                            "params_seq cannot be None when execute_mode is 'many'"
+                        )
+                    await cur.executemany(q, params)
                     try:
                         return await cur.fetchall()
                     except:
                         return []
                 else:
-                    await cur.execute(q)
+                    await cur.execute(q, params)
                     try:
-                        return [await cur.fetchone()]
+                        return await cur.fetchall()
                     except:
                         return []
 

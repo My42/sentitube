@@ -14,7 +14,9 @@ COPY ./src ./src
 # === Dev stage ===
 FROM base AS dev
 
-CMD ["poetry", "run", "fastapi", "dev", "src/api.py", "--", "--proxy-headers", "--port", "8080", "--host", "0.0.0.0"]
+RUN pip install debugpy -t /tmp
+
+CMD ["poetry", "run", "python", "/tmp/debugpy", "--", "--listen", "0.0.0.0:6901", "-m", "fastapi", "dev", "src/api.py", "--proxy-headers", "--port", "8080", "--host", "0.0.0.0"]
 
 # === Prod stage ===
 FROM base AS prod

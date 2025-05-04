@@ -24,8 +24,24 @@ class AnalyzeRepository:
         """
 
         await self.__database_service.query(
-            query,
-            [analyze.model_dump() for analyze in analyzes],
+            query, [analyze.model_dump() for analyze in analyzes], execute_mode="many"
         )
 
         return [analyze.yt_comment_id for analyze in analyzes]
+
+    async def get_by_yt_video_id(self, yt_video_id: str) -> list[Analyze]:
+        query = """
+        SELECT  justification,
+                sentiment_score,
+                yt_comment_id,
+                yt_comment_text,
+                yt_video_id
+        FROM analyzes
+        WHERE yt_video_id = %s
+        AND yt_video_id = %s
+        """
+
+        result = await self.__database_service.query(query, [yt_video_id, yt_video_id])
+        analyzes = [Analyze(**analyze) for analyze in result]
+
+        return analyzes
