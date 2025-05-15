@@ -32,7 +32,7 @@ class SentimentAnalyserService:
         Instructions:
         Contextual Analysis: Evaluate each comment based on the meaning and sentiment in relation to the video title.
         Sentiment Scoring: Assign a sentiment score between -1 and 1. Use intermediate values (e.g., -0.5, 0.3) for nuanced sentiment.
-        Relevance Check: If a comment is unrelated to the video’s topic, set its sentiment score to null.
+        Relevance Check: If a comment is unrelated to the video's topic, set its sentiment score to null.
         Explain Your Score: Provide a short justification for each score based on the comment's content and its relation to the title. Don't need to rewrite the comment in the justification and starts it with "It"
         
         The video title is: {video_title}
@@ -65,6 +65,8 @@ class SentimentAnalyserService:
         comment_group_by_id = {
             yt_comment.id: yt_comment.text for yt_comment in yt_comments
         }
+        
+        json_blocks = str(response).split("--")
         analyzes: list[Analyze] = [
             Analyze(
                 justification=analyze["justification"],
@@ -73,10 +75,8 @@ class SentimentAnalyserService:
                 yt_comment_text=comment_group_by_id[analyze["id"]],
                 yt_video_id=yt_video_id,
             )
-            for json in response.content.split("--")
-            if (analyze := parser.parse(json))
+            for json_block in json_blocks
+            if (analyze := parser.parse(json_block.strip()))
         ]
-
-        await self.__analyze_repository.save(analyzes)
 
         return analyzes
