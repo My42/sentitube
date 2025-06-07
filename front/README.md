@@ -11,5 +11,7 @@ npm install
 npm run dev
 ```
 
-The default route now displays a simple landing page with a search bar and a call
-to action. Mocked sentiment analysis results remain available at `/results`.
+This frontend uses Tailwind CSS. The default route is a simple landing page with
+a search bar and call to action. Mocked sentiment analysis results remain
+available at `/results`.
+

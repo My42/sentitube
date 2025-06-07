@@ -1,40 +1,23 @@
 export default function Landing() {
   return (
-    <main style={{ padding: '2rem', fontFamily: 'sans-serif', textAlign: 'center' }}>
-      <h1
-        style={{
-          fontSize: '3rem',
-          fontWeight: 'bold',
-          background: 'linear-gradient(90deg, red, white)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          marginBottom: '2rem',
-        }}
-      >
+    <main className="flex flex-col items-center p-8 text-center space-y-6">
+      <h1 className="text-5xl font-extrabold bg-gradient-to-r from-red-600 via-red-300 to-white bg-clip-text text-transparent">
         Sentitube
       </h1>
-      <form style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
+      <form className="flex w-full max-w-xl gap-2">
         <input
           type="text"
           placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-          style={{ flex: '1 0 300px', padding: '0.5rem', fontSize: '1rem' }}
+          className="flex-grow rounded-md border border-gray-300 px-3 py-2 text-base"
         />
         <button
           type="submit"
-          style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: '#ff0000',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            fontSize: '1rem',
-            cursor: 'pointer',
-          }}
+          className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
         >
           Lancer l'analyse
         </button>
       </form>
-      <section style={{ marginTop: '2rem', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto' }}>
+      <section className="max-w-xl text-gray-700">
         <p>
           Sentitube analyse en temps réel les commentaires YouTube afin de vous
           donner un aperçu clair de l'opinion des spectateurs. Entrez simplement

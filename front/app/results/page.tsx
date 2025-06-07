@@ -1,4 +1,4 @@
-export default function Home() {
+export default function Results() {
   const analyses = [
     {
       yt_comment_id: '1',
@@ -21,17 +21,20 @@ export default function Home() {
   ]
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>Sentiment analyses</h1>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+    <main className="p-8 space-y-4">
+      <h1 className="text-2xl font-semibold">Analyses fictives</h1>
+      <ul className="space-y-4">
         {analyses.map((a) => (
-          <li
-            key={a.yt_comment_id}
-            style={{ border: '1px solid #ccc', marginTop: '1rem', padding: '1rem' }}
-          >
-            <p><strong>Comment:</strong> {a.yt_comment_text}</p>
-            <p><strong>Score:</strong> {a.sentiment_score}</p>
-            <p><strong>Justification:</strong> {a.justification}</p>
+          <li key={a.yt_comment_id} className="rounded-md border p-4">
+            <p>
+              <strong>Commentaire:</strong> {a.yt_comment_text}
+            </p>
+            <p>
+              <strong>Score:</strong> {a.sentiment_score}
+            </p>
+            <p>
+              <strong>Justification:</strong> {a.justification}
+            </p>
           </li>
         ))}
       </ul>
