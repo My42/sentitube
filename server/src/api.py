@@ -25,7 +25,7 @@ async def get_task(task_id: str) -> dict:
 
 @app.post("/yt-videos/analyze")
 async def analyze_sentiments_of_video(body: PostBodyYtVideoAnalyze) -> dict:
-    task = analyze_comments.delay(body.yt_video_it)
+    task = analyze_comments.delay(body.yt_video_id)
 
     return {"task_id": task.id}
 

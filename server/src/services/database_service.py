@@ -35,10 +35,10 @@ class DatabaseService:
                         return []
 
     async def __get_conn(self) -> AsyncConnection:
-        if getattr(self, "__con", None):
+        if getattr(self, "__conn", None):
             return self.__conn
 
-        self.__con = await AsyncConnection.connect(
+        self.__conn = await AsyncConnection.connect(
             dbname=os.environ["POSTGRES_DB"],
             user=os.environ["POSTGRES_USER"],
             password=os.environ["POSTGRES_PASSWORD"],
@@ -46,4 +46,4 @@ class DatabaseService:
             port=os.environ["POSTGRES_PORT"],
         )
 
-        return self.__con
+        return self.__conn
