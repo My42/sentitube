@@ -74,6 +74,18 @@ services:
       - 8080:8080
       - 6901:6901
 
+  front:
+    build:
+      context: ./front
+      dockerfile: dockerfile.front
+    container_name: front
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=${APP_ENV}
+    depends_on:
+      - api
+
 volumes:
   pgdata:
   redisdata:
