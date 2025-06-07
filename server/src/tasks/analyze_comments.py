@@ -11,21 +11,23 @@ injector = Injector()
 
 
 @celery_app.task(bind=True)
-def analyze_comments(self, yt_video_id: str) -> list[dict]:
+def task_analyze_comments(self, yt_video_id: str) -> list[dict]:
     async def inner_fn(yt_video_id: str) -> list[dict]:
-        self.update_state(state='PROGRESS', meta={'status': 'Fetching video and comments'})
-
-        sentiment_analyzer = injector.get(SentimentAnalyserService)
         analyze_repository = injector.get(AnalyzeRepository)
-
-        comments = await sentiment_analyzer.analyze_comments(yt_video_id)
+        sentiment_analyzer = injector.get(SentimentAnalyserService)
         
-        self.update_state(state='PROGRESS', meta={'status': 'Saving analysis results'})
-        await analyze_repository.save(comments)
+        analyses = await analyze_repository.get_by_yt_video_id(yt_video_id)
 
-        return [comment.model_dump() for comment in comments]
+        if not analyses:
+            self.update_state(state='PROGRESS', meta={'status': 'Fetching video and comments'})
+            analyses = await sentiment_analyzer.analyze_comments(yt_video_id)
+
+            self.update_state(state='PROGRESS', meta={'status': 'Saving analysis results'})
+            await analyze_repository.save(analyses)
+
+        return [analyse.model_dump() for analyse in analyses]
 
     return asyncio.run(inner_fn(yt_video_id))
 
 
-analyze_comments: Task = analyze_comments
+analyze_comments: Task = task_analyze_comments
